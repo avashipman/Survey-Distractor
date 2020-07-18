@@ -113,7 +113,7 @@ jsPsych.plugins["survey-distractor"] = (function() {
 
     plugin.trial = function(display_element, trial) {
 
-      display_element.innerHTML = '<div id="main_task-form"></div><div id="distactor-stimulus"></div>' 
+      display_element.innerHTML = '<div id="main_task-form"></div><div id="distractor-stimulus"></div>' 
       display_element_main_task = document.querySelector('#main_task-form')
       display_element_distractor = document.querySelector('#distractor-stimulus')
 
