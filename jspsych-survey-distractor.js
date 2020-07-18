@@ -170,7 +170,7 @@ jsPsych.plugins["survey-distractor"] = (function() {
       htmlSurvey += '<input type="submit" id="main_task-next" class="jspsych-btn main_task" value="'+trial.button_label+'"></input>';
 
       htmlSurvey += '</form>'
-      display_element.innerHTML = htmlSurvey;
+      display_element_main_task.innerHTML = htmlSurvey;
 
       //display distractor stimulus
       var htmlDistractor = '<img src="'+trial.stimulus+'" id="distractor-stimulus" style="';
@@ -187,6 +187,7 @@ jsPsych.plugins["survey-distractor"] = (function() {
         }
       }
       htmlDistractor +='"></img>';
+      display_element_distractor.innerHTML = htmlDistractor;
 
       // store response
       var response = {
@@ -194,7 +195,7 @@ jsPsych.plugins["survey-distractor"] = (function() {
         key: null
       };
 
-      display_element.querySelector('#main_task-form').addEventListener('submit', function(e) {
+      display_element_main_task.querySelector('#main_task-form').addEventListener('submit', function(e) {
         e.preventDefault();
 
         // create object to hold responses
@@ -247,7 +248,7 @@ jsPsych.plugins["survey-distractor"] = (function() {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector('#distractor-stimulus').className += ' responded';
+      display_element_distractor.querySelector('#distractor-stimulus').className += ' responded';
 
       // only record the first response
       if (response.key == null) {
@@ -273,7 +274,7 @@ jsPsych.plugins["survey-distractor"] = (function() {
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
-        display_element.querySelector('#distractor-stimulus').style.visibility = 'hidden';
+        display_element_distractor.querySelector('#distractor-stimulus').style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
