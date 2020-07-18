@@ -1,13 +1,3 @@
-   /**
- * jspsych-survey-distractor
- * Ava Shipman
- *
- * plugin for free response survey with a distractor
- *
- * documentation: docs.jspsych.org
- *
- **/
-
 
 jsPsych.plugins["survey-distractor"] = (function() {
 
