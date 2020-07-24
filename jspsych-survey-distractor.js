@@ -1,3 +1,13 @@
+/**
+* jspsych-survey-distractor
+* Ava Shipman
+*
+* plugin for free response survey with a distractor
+*
+* documentation: docs.jspsych.org
+*
+**/
+
 
 jsPsych.plugins["survey-distractor"] = (function() {
 
@@ -114,8 +124,8 @@ jsPsych.plugins["survey-distractor"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    display_element.innerHTML = '<div id="main_task-form"></div><br></br><br></br><div id="distractor-stimulus"></div>' 
-    display_element_main_task = document.querySelector('#main_task-form')
+    display_element.innerHTML = '<div id="main_task"></div><br></br><br></br><div id="distractor-stimulus"></div>' 
+    display_element_main_task = document.querySelector('#main_task')
     display_element_distractor = document.querySelector('#distractor-stimulus')
 
     //survey
@@ -158,10 +168,9 @@ jsPsych.plugins["survey-distractor"] = (function() {
       var question_index = question_order[i];
       htmlSurvey += '<div id="main_task-'+question_index+'" class="main_task-question" style="margin: 2em 0em;">';
       htmlSurvey += '<p class="jspsych-survey-distractor">' + question.prompt + '</p>';
-      var autofocus = i == 0 ? "autofocus" : "";
       var req = question.required ? "required" : "";
       if(question.rows == 1){
-        htmlSurvey += '<input type="text" id="input-'+question_index+'"  name="#main_task-response-' + question_index + '" data-name="'+question.name+'" size="'+question.columns+'" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></input>';
+        htmlSurvey += '<input type="text" id="input-'+question_index+'"  name="#main_task-response-' + question_index + '" data-name="'+question.name+'" size="'+question.columns+'" '+req+' placeholder="'+question.placeholder+'"></input>';
       } else {
         htmlSurvey += '<textarea id="input-'+question_index+'" name="#main_task-response-' + question_index + '" data-name="'+question.name+'" cols="' + question.columns + '" rows="' + question.rows + '" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></textarea>';
       }
@@ -174,24 +183,51 @@ jsPsych.plugins["survey-distractor"] = (function() {
     htmlSurvey += '</form>'
     display_element_main_task.innerHTML = htmlSurvey;
 
-    //display distractor stimulus
-    var htmlDistractor = '<img src="'+trial.stimulus[i]+'" id="distractor-stimulus" style="';
+    //generate image order
+    var image_order = [];
+    for(var i=0; i<trial.stimulus.length; i++){
+      image_order.push(i);
+    }
+    if(trial.randomize_image_order){
+      image_order = jsPsych.randomization.shuffle(image_order);
+    }
 
-    if(trial.stimulus_height !== null){
-      htmlDistractor += 'height:'+trial.stimulus_height+'px; '
-      if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
+    //display distractor stimulus
+    var htmlDistractor = '';
+
+    htmlDistractor += '<img src="' +trial.stimulus+ '" id="distractor-stimulus-" style="';
+    if (trial.stimulus_height !== null) {
+      htmlDistractor += 'height:' + trial.stimulus_height + 'px; '
+      if (trial.stimulus_width == null && trial.maintain_aspect_ratio) {
         htmlDistractor += 'width: auto; ';
       }
     }
-    if(trial.stimulus_width !== null){
-      htmlDistractor += 'width:'+trial.stimulus_width+'px; '
-      if(trial.stimulus_height == null && trial.maintain_aspect_ratio){
+    if (trial.stimulus_width !== null) {
+      htmlDistractor += 'width:' + trial.stimulus_width + 'px; '
+      if (trial.stimulus_height == null && trial.maintain_aspect_ratio) {
         htmlDistractor += 'height: auto; ';
       }
     }
+    htmlDistractor += '"></img>';
 
-    htmlDistractor +='"></img>';
+    for (var i = 0; i < trial.stimulus.length; i++) {
+      var images = trial.stimulus[image_order[i]];
+      var image_index = image_order[i];
+      htmlDistractor +='<div id="distractor-stimulus-'+image_index+''+images+'" class="distractor-stimulus-image">';
+      var img = document.getElementById("distractor-stimulus");
+      var index = 0;
+      function changeImage() {
+        index++;
+        index = index % trial.stimulus.length; 
+        img.src = trial.stimulus[index];
+      }
+      setInterval(changeImage, trial.response_next_image);
+    
+    htmlDistractor += '</div>';
+    }
+    
     display_element_distractor.innerHTML = htmlDistractor;
+
 
     // store response
     var response = {
@@ -207,19 +243,14 @@ jsPsych.plugins["survey-distractor"] = (function() {
       if (typeof keyboardListener !== 'undefined') {
         jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
       }
-      //next image
-      function changeImage(){
-        var img = document.getElementById('distractor-stimulus')
-        var index = 0;
-        index++;
-        index = index % trial.stimulus.length; // This is for if this is the last image then goto first image
-        img = trial.stimulus[index];
-        };
-      setInterval(changeImage, trial.response_next_image);
-
-      if (response.key == trial.choices) {
-        changeImage()
+      
+      var img = document.getElementById("distractor-stimulus");
+      function changeImage() {
+        image_index++;
+        image_index = image_index % trial.stimulus.length; 
+        img.src = trial.stimulus[image_index];
       }
+      setInterval(changeImage, trial.response_next_image);
     }
 
     //distractor to next image function
