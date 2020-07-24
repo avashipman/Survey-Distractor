@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Alternate</title>
+  <script src="jspsych-6.1.0/jspsych.js"></script>
+  <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="jspsych-6.1.0/plugins/jspsych-survey-text.js"></script>
+  <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+  <script src="jspsych-6.1.0/jspsych-survey-distractor.js"></script>
+  <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css">
+  </link>
+  <style>
+  .center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+  </style>
+</head>
+<body></body>
+<script>
+  var timeline = [];
+  /* define welcome message trial */
+  var welcome = {
+    type: "html-keyboard-response",
+    stimulus: "Welcome to the experiment. Press any key to begin."
+  };
+  timeline.push(welcome);
+
+  /* define instructions trial */
+  var instructions = {
+    type: "html-keyboard-response",
+    stimulus: "<p>In this task, we will ask you a variety of questions about your impressions, activities, beliefs, preferences, etc. " +
+      "We would like you to answer each of these questions with one full sentence, which can be as long as you want. " +
+      "For any question, if you can't think of an answer from your experiences (or prefer not to), please respond with what you imagine a friend or acquaintance might respond. " +
+      "Do not worry about making errors while typing.<strong> Just type what comes to mind. </strong> " +
+      "We will give you a chance afterwards to correct any errors you find in your response. </p>" +
+      "<p>While you are completing your sentence, there will be images on the bottom of the screen. " +
+      "If you see a <strong> Red X </strong>, press 8 </p>" +
+      "<br></br>"+
+      "<div class='center'><img src='target.png'></img>" +
+      "<p class='small'><strong>Press 8</strong></p></div>" +
+      "</div>",
+    post_trial_gap: 500
+  };
+  timeline.push(instructions);
+
+  var images = [
+    'blueimg.png', 
+    'blacksquare.png', 
+    'orangeimg.png', 
+    'pentagon.png', 
+    'triangle.png', 
+    'rectangle.png', 
+    'target.png'
+  ];
+
+  var experiment = {
+      type: "survey-distractor",
+      questions: [{ prompt: "What did you do last weekend?" }],
+      stimulus: [
+    'blueimg.png', 
+    'blacksquare.png', 
+    'orangeimg.png', 
+    'pentagon.png', 
+    'triangle.png', 
+    'rectangle.png', 
+    'target.png'
+  ],
+      choices: ['8'],
+      button_label: "SUBMIT",
+      preamble: "Please write one sentence.",
+      response_next_image: 1000,
+  }
+    timeline.push(experiment);
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function () { jsPsych.data.displayData() },
+  })
+</script>
+
+</html>
