@@ -169,7 +169,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
       var req = question.required ? "required" : "";
       if (question.rows == 1) {
         htmlSurvey +=
-          '<input type="text" id="input-' +
+          '<input type="text" onkeyup="'+ lettersOnly(this)+ '" id="input-' +             //lettersOnly(this) not working!
           question_index +
           '"  name="#main_task-response-' +
           question_index +
@@ -204,6 +204,12 @@ jsPsych.plugins["survey-distractor"] = (function () {
       }
       htmlSurvey += "</div>";
     }
+    
+    //No numbers in textbox function (NOT WORKING: says cannot read property of undefined) 
+    function lettersOnly(input) {
+      var regex = /[0-9]/g;
+      input.value = input.value.replace(regex, "");
+  }
 
     // add submit button
     htmlSurvey +=
