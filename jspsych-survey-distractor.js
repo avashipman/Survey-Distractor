@@ -169,7 +169,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
       var req = question.required ? "required" : "";
       if (question.rows == 1) {
         htmlSurvey +=
-          '<input type="text" onkeyup="'+ lettersOnly(this)+ '" id="input-' +             //lettersOnly(this) not working!
+          '<input type="text" id="input-' +             //lettersOnly(this) not working!
           question_index +
           '"  name="#main_task-response-' +
           question_index +
@@ -210,6 +210,9 @@ jsPsych.plugins["survey-distractor"] = (function () {
       var regex = /[0-9]/g;
       input.value = input.value.replace(regex, "");
   }
+    
+    document.querySelector("#input-" + question_index)
+    addEventListener('input', lettersOnly(this))
 
     // add submit button
     htmlSurvey +=
