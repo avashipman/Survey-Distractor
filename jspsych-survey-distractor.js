@@ -169,9 +169,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
       var req = question.required ? "required" : "";
       if (question.rows == 1) {
         htmlSurvey +=
-          '<input type="text" id="input-' +             //lettersOnly(this) not working!
-          question_index +
-          '"  name="#main_task-response-' +
+          '<input type="text" id="survey-input"  name="#main_task-response-' +
           question_index +
           '" data-name="' +
           question.name +
@@ -184,9 +182,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
           '"></input>';
       } else {
         htmlSurvey +=
-          '<textarea id="input-' +
-          question_index +
-          '" name="#main_task-response-' +
+          '<textarea id="survey-input" name="#main_task-response-' +
           question_index +
           '" data-name="' +
           question.name +
@@ -211,7 +207,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
       input.value = input.value.replace(regex, "");
   }
     
-    document.querySelector("#input-" + question_index)
+    document.querySelector("#survey-input")
     addEventListener('input', lettersOnly(this))
 
     // add submit button
