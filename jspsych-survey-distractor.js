@@ -205,7 +205,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
       htmlSurvey += "</div>";
     }
     
-    //No numbers in textbox function (NOT WORKING: says cannot read property of undefined) 
+    //No numbers in textbox function (NOT WORKING: says cannot read property 'replace' of undefined) 
     function lettersOnly(input) {
       var regex = /[0-9]/g;
       input.value = input.value.replace(regex, "");
