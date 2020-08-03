@@ -256,12 +256,29 @@ jsPsych.plugins["survey-distractor"] = (function () {
       index = index % trial.stimulus.length;
       img.src = trial.stimulus[index];
     }
-    setInterval(changeImage, trial.response_next_image);
+    const intervalId = setInterval(changeImage, trial.response_next_image);
 
     // store response
     var response = {
       rt: null,
       key: null,
+    };
+
+
+    // function to handle responses by the subject
+    
+    var distractor_data = []
+    var after_response = function (info) {
+      // after a valid response, the stimulus will have the CSS class 'responded'
+      // which can be used to provide visual feedback that a response was recorded
+      display_element_distractor.querySelector(
+        "#distractor-stimulus"
+      ).className += " responded";
+
+      // only record the choice response
+      if (trial.choices.includes(info.key)) {
+        distractor_data.push({ image: img.src, response: info.key, correct_response: img.src === 'target.png' })
+      }
     };
 
     display_element_main_task
@@ -290,30 +307,16 @@ jsPsych.plugins["survey-distractor"] = (function () {
         // save data
         var trial_data = {
           responses: JSON.stringify(question_data),
-          rt: response.rt,
-          stimulus: trial.stimulus,
-          key_press: response.key,
+          time_elapsed: response.rt,
+          distractor_data: distractor_data
         };
 
         display_element.innerHTML = "";
 
         // next trial
+        clearInterval(intervalId)
         jsPsych.finishTrial(trial_data);
       });
-
-    // function to handle responses by the subject
-    var after_response = function (info) {
-      // after a valid response, the stimulus will have the CSS class 'responded'
-      // which can be used to provide visual feedback that a response was recorded
-      display_element_distractor.querySelector(
-        "#distractor-stimulus"
-      ).className += " responded";
-
-      // only record the choice response
-      if (response.key == trial.choices) {
-        response = info;
-      }
-    };
 
     // start the response listener
     if (trial.choices != jsPsych.NO_KEYS) {
