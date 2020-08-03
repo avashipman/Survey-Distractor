@@ -277,7 +277,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
 
       // only record the choice response
       if (trial.choices.includes(info.key)) {
-        distractor_data.push({ image: img.src, response: info.key, correct_response: img.src === 'target.png' })
+        distractor_data.push({ image: img.src, response: info.key, correct_response: img.src === 'file name of picture' })
       }
     };
 
