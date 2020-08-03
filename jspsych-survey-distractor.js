@@ -200,14 +200,6 @@ jsPsych.plugins["survey-distractor"] = (function () {
       }
       htmlSurvey += "</div>";
     }
-    
-    //No numbers in textbox function (NOT WORKING: says cannot read property 'replace' of undefined) 
-    function lettersOnly(input) {
-      var regex = /[0-9]/g;
-      input.value = input.value.replace(regex, "");
-  }
-    
-    document.querySelector("#survey-input").addEventListener('input', lettersOnly)
 
     // add submit button
     htmlSurvey +=
@@ -217,6 +209,14 @@ jsPsych.plugins["survey-distractor"] = (function () {
 
     htmlSurvey += "</form>";
     display_element_main_task.innerHTML = htmlSurvey;
+    
+    //No numbers in textbox function (NOT WORKING: says cannot read property 'replace' of undefined) 
+    function lettersOnly(input) {
+      var regex = /[0-9]/g;
+      input.value = input.value.replace(regex, "");
+  }
+    
+    document.querySelector("#survey-input").addEventListener('input', lettersOnly)
 
     //generate image order
     var image_order = [];
