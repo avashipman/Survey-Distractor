@@ -213,6 +213,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
     //No numbers in textbox function (NOT WORKING: says cannot read property 'replace' of undefined) 
     function lettersOnly(input) {
       var regex = /[0-9]/g;
+      var input = event.target;
       input.value = input.value.replace(regex, "");
   }
     
