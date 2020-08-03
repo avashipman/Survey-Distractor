@@ -69,7 +69,7 @@ var trials = [];
       var trial_data = { test_part: 'test', correct_response: jsPsych.NO_KEYS};
     }
     else{
-      var trial_data = {test_part: 'test', correct_response: '8'};
+      var trial_data = {test_part: 'test', correct_response: 56};
     }
     trials.push({
       data: trial_data
@@ -81,7 +81,7 @@ var trials = [];
       type: "survey-distractor",
       questions: [{ prompt: "What is your favorite color and why?"}],
       stimulus: Array.from(sample),
-      choices: ['8'],
+      choices: ['56'],
       button_label: "SUBMIT",
       preamble: "Please write one sentence.",
       response_next_image: 2000,
