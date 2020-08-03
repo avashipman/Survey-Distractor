@@ -207,8 +207,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
       input.value = input.value.replace(regex, "");
   }
     
-    document.querySelector("#survey-input")
-    addEventListener('input', lettersOnly(this))
+    document.querySelector("#survey-input").addEventListener('input', lettersOnly)
 
     // add submit button
     htmlSurvey +=
