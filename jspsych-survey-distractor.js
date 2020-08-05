@@ -254,6 +254,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
       console.log(img);
       index++;
       index = index % trial.stimulus.length;
+      img.classList.remove('responded')
       img.src = trial.stimulus[index];
     }
     const intervalId = setInterval(changeImage, trial.response_next_image);
@@ -277,7 +278,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
 
       // only record the choice response
       if (trial.choices.includes(info.key)) {
-        distractor_data.push({ image: img.src, response: info.key, correct_response: img.src === 'file name of picture' })
+        distractor_data.push({ image: img.src, response: info.key, correct_response: img.src === 'file:///Users/avashipman/Desktop/UROP/UROP%202020/Survey-Distractor/target.png' })
       }
     };
 
@@ -308,6 +309,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
         var trial_data = {
           responses: JSON.stringify(question_data),
           time_elapsed: response.rt,
+          stimulus: trial.stimulus,
           distractor_data: distractor_data
         };
 
@@ -315,6 +317,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
 
         // next trial
         clearInterval(intervalId)
+        jsPsych.pluginAPI.cancelAllKeyboardResponses();
         jsPsych.finishTrial(trial_data);
       });
 
@@ -323,7 +326,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
       var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
-        persist: false,
+        persist: true,
         allow_held_key: false,
       });
       keyboardListener;
